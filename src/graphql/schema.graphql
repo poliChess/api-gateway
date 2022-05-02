@@ -1,0 +1,82 @@
+scalar Date
+
+type Query {
+  running: String!
+
+  # user service
+  me: User!
+  user(username: String!): User
+
+  # matchmaking service
+  matches: [Match!]!
+
+  # game engine service
+  bestMove(fen: String!): BestMoveResponse!
+  validateMove(fen: String!, move: String!): Status!
+}
+
+type Mutation {
+  # user service
+  register(mail: String!, username: String!, password: String!): Status!
+  login(username: String!, password: String!): LoginResponse!
+  updateUser(mail: String, username: String, password: String): UpdateUserResponse!
+  deleteUser: Status!
+
+  # matchmaking service
+  enterQueue: Status!
+  leaveQueue: Status!
+}
+
+type User {
+  mail: String!
+  username: String!
+
+  playedGames: Int!
+  wonGames: Int!
+  rating: Int!
+
+  lastLogin: Date
+
+  history: [Match]!
+  currentGame: Match
+}
+
+type Match {
+  id: ID!
+  type: String!
+
+  player1: User!
+  player2: User
+
+  status: String!
+  winner: String!
+
+  state: String
+  moves: [String]
+
+  startedAt: Date
+  finishedAt: Date
+}
+
+type BestMoveResponse implements Status {
+  move: String
+  success: Boolean!
+  message: String!
+}
+
+type LoginResponse implements Status {
+  token: String
+  success: Boolean!
+  message: String!
+}
+
+type UpdateUserResponse implements Status {
+  user: User
+  success: Boolean!
+  message: String!
+}
+
+interface Status {
+  success: Boolean!
+  message: String!
+}

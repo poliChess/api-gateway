@@ -1,14 +1,20 @@
-import express from 'express';
+import { ApolloServer } from 'apollo-server';
+
+import typeDefs from './graphql/schema';
+import resolvers from './graphql/resolver';
 
 function main() {
-  const server = express();
+  const server = new ApolloServer({ 
+    typeDefs,
+    resolvers,
+    context: ({req}) => {
+      const token = req.headers.authorization || '';
+      return { token }
+    }
+  });
 
-  server.get('/running', (req, res) => {
-    res.send('yes');
-  })
-
-  server.listen(3000, () => {
-    console.log('api gateway started');
+  server.listen(3000).then(() => {
+    console.log("api gateway started");
   });
 }
 
