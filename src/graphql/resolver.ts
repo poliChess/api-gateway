@@ -1,6 +1,6 @@
 import { getMatches } from './services/matchService';
 import { getUser, findUser, addUser, authenticate } from './services/userService';
-import { statusGood, authThen } from './utils';
+import { statusGood, authThen, statusBad } from './utils';
 import jwt from '../jwt';
 
 import { Root } from './utils';
@@ -29,21 +29,21 @@ const resolvers: Root = {
       return res
     },
 
-    updateUser: authThen(() => {}),
-    deleteUser: authThen(() => {}),
+    updateUser: authThen(() => statusBad('not implemented')),
+    deleteUser: authThen(() => statusBad('not implemented')),
 
-    enterQueue: authThen(() => {}),
-    leaveQueue: authThen(() => {}),
+    enterQueue: authThen(() => statusBad('not implemented')),
+    leaveQueue: authThen(() => statusBad('not implemented')),
   },
 
   User: {
-    history: () => {},
-    currentGame: () => {},
+    history: () => [],
+    currentGame: () => null,
   },
 
   Match: {
     player1: () => {},
-    player2: () => {},
+    player2: () => null,
   }
 }
 
