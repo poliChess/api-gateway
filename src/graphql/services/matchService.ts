@@ -1,30 +1,34 @@
-import { createClient } from "@urql/core";
+import axios from 'axios';
 
-const client = createClient({
-  url: 'http://localhost:3002/graphql'
-})
-
-const MATCHES = `
-  query {
-    matches {
-      id
-      type
-      player1ID
-      player2ID
-      status
-      winner
-      toMove
-      state
-      moves
-      startedAt
-      finishedAt
-    }
-  }
-`;
+const serviceUrl = 'http://localhost:3002';
 
 async function getMatches() {
-  const result = await client.query(MATCHES).toPromise();
-  return result.data.matches;
+  const res = await axios.get(`${serviceUrl}/match/current`);
+  return res.data;
 }
 
-export { getMatches }
+async function getHistory(args: { playerID: string, before?: Date, after?: Date }) {
+  const res = await axios.get(
+    `${serviceUrl}/match/history`,
+    { data: args }
+  );
+  return res.data;
+}
+
+async function enterQueue(args: { playerID: string, playerRating: number }) {
+  const res = await axios.post(
+    `${serviceUrl}/queue/enter`,
+    args
+  );
+  return res.data;
+}
+
+async function leaveQueue(args: { playerID: string }) {
+  const res = await axios.post(
+    `${serviceUrl}/queue/leave`,
+    args
+  );
+  return res.data;
+}
+
+export { getMatches, getHistory, enterQueue, leaveQueue }

@@ -1,5 +1,5 @@
-import { getMatches } from './services/matchService';
-import { getUser, findUser, addUser, authenticate } from './services/userService';
+import { getMatches, getHistory, leaveQueue, enterQueue } from './services/matchService';
+import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
 import { statusGood, authThen, statusBad } from './utils';
 import jwt from '../jwt';
 
@@ -14,36 +14,38 @@ const resolvers: Root = {
 
     matches: authThen(() => getMatches()),
 
-    bestMove: () => {},
-    validateMove: () => {},
+    bestMove: () => statusBad('not implemented'),
+    validateMove: () => statusBad('not implemented'),
   },
 
   Mutation: {
     register: ({}, args) => addUser(args),
     login: async ({}, args) => {
       const res = await authenticate(args);
-
       if (!res.success) return res;
 
       res.token = jwt.create({ id: res.user.id });
       return res
     },
 
-    updateUser: authThen(() => statusBad('not implemented')),
-    deleteUser: authThen(() => statusBad('not implemented')),
+    updateUser: authThen(({}, args, context) => updateUser({ id: context.identity.id, ...args })),
+    deleteUser: authThen(({}, {}, context) => deleteUser(context.identity.id)),
 
-    enterQueue: authThen(() => statusBad('not implemented')),
-    leaveQueue: authThen(() => statusBad('not implemented')),
+    enterQueue: authThen(async ({}, {}, context) => { 
+      const user = await getUser(context.identity.id);
+      return enterQueue({ playerID: user.id, playerRating: user.rating });
+    }),
+    leaveQueue: authThen(({}, {}, context) => leaveQueue({ playerID: context.identity.id })),
   },
 
   User: {
-    history: () => [],
+    history: (parent, args) => getHistory({ playerID: parent.id, ...args }),
     currentGame: () => null,
   },
 
   Match: {
-    player1: () => {},
-    player2: () => null,
+    player1: (parent) => getUser(parent.player1ID),
+    player2: (parent) => parent.type === "COMPUTER" ? null : getUser(parent.player2ID),
   }
 }
 

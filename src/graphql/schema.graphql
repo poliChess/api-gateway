@@ -37,7 +37,7 @@ type User {
 
   lastLogin: Date
 
-  history: [Match]!
+  history(before: Date, after: Date): [Match]!
   currentGame: Match
 }
 
@@ -56,7 +56,7 @@ type Match {
   moves: [String]!
 
   startedAt: Date!
-  finishedAt: Date!
+  finishedAt: Date
 }
 
 type BestMoveResponse implements Status {
