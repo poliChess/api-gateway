@@ -12,19 +12,19 @@ type Query {
 
   # game engine service
   bestMove(fen: String!): BestMoveResponse!
-  validateMove(fen: String!, move: String!): Status!
+  validateMove(fen: String!, move: String!): StandardStatus!
 }
 
 type Mutation {
   # user service
-  register(mail: String!, username: String!, password: String!): Status!
+  register(mail: String!, username: String!, password: String!): StandardStatus!
   login(username: String!, password: String!): LoginResponse!
   updateUser(mail: String, username: String, password: String): UpdateUserResponse!
-  deleteUser: Status!
+  deleteUser: StandardStatus!
 
   # matchmaking service
-  enterQueue: Status!
-  leaveQueue: Status!
+  enterQueue: StandardStatus!
+  leaveQueue: StandardStatus!
 }
 
 type User {
@@ -51,11 +51,12 @@ type Match {
   status: String!
   winner: String!
 
-  state: String
-  moves: [String]
+  toMove: Boolean!
+  state: String!
+  moves: [String]!
 
-  startedAt: Date
-  finishedAt: Date
+  startedAt: Date!
+  finishedAt: Date!
 }
 
 type BestMoveResponse implements Status {
@@ -65,6 +66,7 @@ type BestMoveResponse implements Status {
 }
 
 type LoginResponse implements Status {
+  user: User
   token: String
   success: Boolean!
   message: String!
@@ -72,6 +74,11 @@ type LoginResponse implements Status {
 
 type UpdateUserResponse implements Status {
   user: User
+  success: Boolean!
+  message: String!
+}
+
+type StandardStatus implements Status {
   success: Boolean!
   message: String!
 }
