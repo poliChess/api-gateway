@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serviceUrl = 'http://localhost:3002';
+const serviceUrl = 'http://matchmaking-service:3000';
 
 async function getMatches() {
   const res = await axios.get(`${serviceUrl}/match/current`);

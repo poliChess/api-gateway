@@ -1,7 +1,7 @@
 import { createClient } from "@urql/core";
 
 const client = createClient({
-  url: 'http://localhost:3001/graphql'
+  url: 'http://user-service:3000/graphql'
 })
 
 const queries = {
