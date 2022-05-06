@@ -1,8 +1,10 @@
-import { getMatches, getHistory, leaveQueue, enterQueue } from './services/matchService';
-import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
-import { statusGood, authThen, statusBad } from './utils';
 import jwt from '../jwt';
 
+import { getMatches, getHistory, leaveQueue, enterQueue } from './services/matchService';
+import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
+import { suggetMove, validateMove } from './services/gameEngineService';
+
+import { statusGood, authThen, statusBad } from './utils';
 import { Root } from './utils';
 
 const resolvers: Root = {
@@ -14,8 +16,8 @@ const resolvers: Root = {
 
     matches: authThen(() => getMatches()),
 
-    bestMove: () => statusBad('not implemented'),
-    validateMove: () => statusBad('not implemented'),
+    suggestMove: ({}, args) => suggetMove(args.fen),
+    validateMove: ({}, args) => validateMove(args.fen, args.move),
   },
 
   Mutation: {

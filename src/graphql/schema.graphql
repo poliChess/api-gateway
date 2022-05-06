@@ -11,8 +11,8 @@ type Query {
   matches: [Match!]!
 
   # game engine service
-  bestMove(fen: String!): BestMoveResponse!
-  validateMove(fen: String!, move: String!): StandardStatus!
+  suggestMove(fen: String!): MoveResponse!
+  validateMove(fen: String!, move: String!): MoveResponse!
 }
 
 type Mutation {
@@ -59,8 +59,9 @@ type Match {
   finishedAt: Date
 }
 
-type BestMoveResponse implements Status {
+type MoveResponse implements Status {
   move: String
+  newFen: String
   success: Boolean!
   message: String!
 }
