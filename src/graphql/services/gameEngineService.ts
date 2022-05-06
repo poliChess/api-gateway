@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const serviceUrl = 'http://localhost:3001/engine';
+const serviceUrl = 'http://game-engine-service:3000/engine';
 
 async function suggetMove(fen: string) {
   console.log(fen);
