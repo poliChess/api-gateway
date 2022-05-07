@@ -4,12 +4,12 @@ import { getMatches, getHistory, leaveQueue, enterQueue } from './services/match
 import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
 import { suggetMove, validateMove } from './services/gameEngineService';
 
-import { statusGood, authThen, statusBad } from './utils';
+import { authThen } from './utils';
 import { Root } from './utils';
 
 const resolvers: Root = {
   Query: {
-    running: () => statusGood,
+    running: () => 'yes',
 
     me: authThen(({}, {}, context) => getUser(context.identity.id)),
     user: authThen(({}, args) => findUser(args.username)),
