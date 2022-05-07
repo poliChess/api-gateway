@@ -16,7 +16,7 @@ const queries = {
         lastLogin
       }
     }`,
-  findUser: `query($id: ID!) {
+  findUser: `query($username: String!) {
       findUser(username: $username) {
         id
         mail
@@ -66,7 +66,7 @@ const mutations = {
         message
       } 
     }`,
-  deleteUser: `mutation ($id: ID!) {
+  deleteUser: `mutation($id: ID!) {
       deleteUser(id: $id) {
         success
         message
