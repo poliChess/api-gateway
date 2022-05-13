@@ -23,7 +23,7 @@ type Mutation {
   deleteUser: StandardStatus!
 
   # matchmaking service
-  enterQueue: StandardStatus!
+  enterQueue(computer: Boolean): StandardStatus!
   leaveQueue: StandardStatus!
 }
 

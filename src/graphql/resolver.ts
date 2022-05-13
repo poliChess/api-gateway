@@ -33,16 +33,16 @@ const resolvers: Root = {
     updateUser: authThen(({}, args, context) => updateUser({ id: context.identity.id, ...args })),
     deleteUser: authThen(({}, {}, context) => deleteUser(context.identity.id)),
 
-    enterQueue: authThen(async ({}, {}, context) => { 
+    enterQueue: authThen(async ({}, args, context) => { 
       const user = await getUser(context.identity.id);
-      return enterQueue({ playerID: user.id, playerRating: user.rating });
+      return enterQueue({ playerID: user.id, playerRating: user.rating, computer: args.computer });
     }),
     leaveQueue: authThen(({}, {}, context) => leaveQueue({ playerID: context.identity.id })),
   },
 
   User: {
     history: (parent, args) => getHistory({ playerID: parent.id, ...args }),
-    currentGame: () => null,
+    currentGame: ({}, {}, context) => getMatches({ playerID: context.identity.id }),
   },
 
   Match: {

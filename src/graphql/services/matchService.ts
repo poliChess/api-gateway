@@ -2,8 +2,8 @@ import axios from 'axios';
 
 const serviceUrl = 'http://matchmaking-service:3000';
 
-async function getMatches() {
-  const res = await axios.get(`${serviceUrl}/match/current`);
+async function getMatches(args?: { playerID: string }) {
+  const res = await axios.get(`${serviceUrl}/match/current`, { data: args });
   return res.data;
 }
 
@@ -12,7 +12,7 @@ async function getHistory(args: { playerID: string, before?: Date, after?: Date 
   return res.data;
 }
 
-async function enterQueue(args: { playerID: string, playerRating: number }) {
+async function enterQueue(args: { playerID: string, playerRating: number, computer: boolean }) {
   const res = await axios.post(`${serviceUrl}/queue/enter`, args);
   return res.data;
 }
