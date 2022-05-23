@@ -2,7 +2,7 @@ import jwt from '../jwt';
 
 import { getMatches, getHistory, leaveQueue, enterQueue } from './services/matchService';
 import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
-import { suggetMove, validateMove } from './services/gameEngineService';
+import { suggestMove, validateMove } from './services/gameEngineService';
 
 import { authThen } from './utils';
 import { Root } from './utils';
@@ -16,7 +16,7 @@ const resolvers: Root = {
 
     matches: authThen(() => getMatches()),
 
-    suggestMove: ({}, args) => suggetMove(args.fen),
+    suggestMove: ({}, args) => suggestMove(args.fen),
     validateMove: ({}, args) => validateMove(args.fen, args.move),
   },
 
@@ -27,7 +27,7 @@ const resolvers: Root = {
       if (!res.success) return res;
 
       res.token = jwt.create({ id: res.user.id });
-      return res
+      return res;
     },
 
     updateUser: authThen(({}, args, context) => updateUser({ id: context.identity.id, ...args })),
