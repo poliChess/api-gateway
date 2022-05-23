@@ -62,7 +62,7 @@ type Match {
 enum MoveResult {
   DRAW
   WINNER_WHITE
-  WINNEER_BLACK
+  WINNER_BLACK
 }
 
 type MoveResponse implements Status {
