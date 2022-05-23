@@ -59,9 +59,16 @@ type Match {
   finishedAt: Date
 }
 
+enum MoveResult {
+  DRAW
+  WINNER_WHITE
+  WINNEER_BLACK
+}
+
 type MoveResponse implements Status {
   move: String
   newFen: String
+  result: MoveResult
   success: Boolean!
   message: String!
 }
