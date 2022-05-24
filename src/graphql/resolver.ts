@@ -42,7 +42,7 @@ const resolvers: Root = {
 
   User: {
     history: (parent, args) => getHistory({ playerID: parent.id, ...args }),
-    currentGame: ({}, {}, context) => getMatches({ playerID: context.identity.id }),
+    currentGame: (parent) => getMatches({ playerID: parent.id }),
   },
 
   Match: {

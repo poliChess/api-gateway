@@ -42,16 +42,14 @@ type User {
 }
 
 type Match {
-  id: ID!
   type: String!
 
   player1: User!
   player2: User
 
-  status: String!
-  winner: String!
+  toMove: Boolean
 
-  toMove: Boolean!
+  winner: Winner
   state: String!
   moves: [String]!
 
@@ -63,6 +61,13 @@ enum MoveResult {
   DRAW
   WINNER_WHITE
   WINNER_BLACK
+}
+
+enum Winner {
+  WHITE
+  BLACK
+  DRAW
+  STALEMATE
 }
 
 type MoveResponse implements Status {
