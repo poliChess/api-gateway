@@ -54,6 +54,8 @@ const mutations = {
     }`,
   updateUser: `mutation($id: ID!, $mail: String, $username: String, $password: String) {
       updateUser(id: $id, mail: $mail, username: $username, password: $password) {
+        success
+        message
         user {
           id
           mail
@@ -63,8 +65,6 @@ const mutations = {
           rating
           lastLogin
         }
-        success
-        message
       } 
     }`,
   deleteUser: `mutation($id: ID!) {
@@ -113,15 +113,38 @@ async function addUser(args: { mail: string, username: string, password: string 
 
 async function authenticate(args: { username: string, password: string }) {
   const res = await client.mutation(mutations.authenticate, args).toPromise();
+
+  if (res.data && res.data.authenticate.success) {
+    const redis = await getClient();
+    const user = res.data.authenticate.user;
+
+    redis.set(user.id, JSON.stringify(user));
+    redis.set(user.username, user.id);
+  }
+
   return res.data.authenticate;
 }
 
 async function updateUser(args: { id: string, mail: string, username: string, password: string }) {
   const res = await client.mutation(mutations.updateUser, args).toPromise();
+
+  if (res.data && res.data.updateUser.success) {
+    const redis = await getClient();
+    const user = res.data.updateUser.user;
+
+    redis.set(user.id, JSON.stringify(user));
+    redis.set(user.username, user.id);
+  }
+
   return res.data.updateUser;
 }
 
 async function deleteUser(id: string) {
+  const redis = await getClient();
+  const user = await getUser(id);
+  redis.del(id);
+  redis.del(user.username);
+
   const res = await client.mutation(mutations.deleteUser, { id }).toPromise();
   return res.data.deleteUser;
 }
