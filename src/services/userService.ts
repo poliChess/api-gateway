@@ -79,12 +79,9 @@ async function getUser(id: string) {
   const redis = await getClient();
 
   const cached = await redis.get(id);
-  if (cached) {
-    console.log('CACHE HIT!');
+  if (cached)
     return JSON.parse(cached);
-  }
 
-  console.log('CACHE MISS!');
   const res = await client.query(queries.user, { id }).toPromise();
   
   redis.set(id, JSON.stringify(res.data.user));
@@ -92,8 +89,21 @@ async function getUser(id: string) {
 }
 
 async function findUser(username: string) {
-  const res = await client.query(queries.findUser, { username }).toPromise();
-  return res.data.findUser;
+  const redis = await getClient();
+
+  const cachedID = await redis.get(username);
+  if (cachedID) {
+    return await getUser(cachedID);
+  } else {
+    const res = await client.query(queries.findUser, { username }).toPromise();
+
+    if (res.data && res.data.findUser) {
+      redis.set(username, res.data.findUser.id);
+      redis.set(res.data.findUser.id, JSON.stringify(res.data.findUser));
+    }
+
+    return res.data.findUser;
+  }
 }
 
 async function addUser(args: { mail: string, username: string, password: string }) {
