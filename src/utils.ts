@@ -1,6 +1,6 @@
 import { AuthenticationError } from 'apollo-server';
 
-import { Identity } from '../jwt';
+import { Identity } from './jwt';
 
 type SyncResolver = (parent: any, args: any, context: { identity: Identity }) => any;
 type AsyncResolver = (parent: any, args: any, context: { identity: Identity }) => Promise<any>

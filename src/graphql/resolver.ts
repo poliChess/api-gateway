@@ -1,11 +1,11 @@
 import jwt from '../jwt';
 
-import { getMatches, getHistory, leaveQueue, enterQueue } from './services/matchService';
-import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from './services/userService';
-import { suggestMove, validateMove } from './services/gameEngineService';
+import { getMatches, getHistory, leaveQueue, enterQueue } from '../services/matchService';
+import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from '../services/userService';
+import { suggestMove, validateMove } from '../services/gameEngineService';
 
-import { authThen } from './utils';
-import { Root } from './utils';
+import { authThen } from '../utils';
+import { Root } from '../utils';
 
 const resolvers: Root = {
   Query: {
