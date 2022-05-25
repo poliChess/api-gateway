@@ -1,4 +1,5 @@
 import { createClient } from "@urql/core";
+import getClient from "../redis";
 
 const client = createClient({
   url: 'http://user-service:3000/graphql'
@@ -75,7 +76,18 @@ const mutations = {
 }
 
 async function getUser(id: string) {
+  const redis = await getClient();
+
+  const cached = await redis.get(id);
+  if (cached) {
+    console.log('CACHE HIT!');
+    return JSON.parse(cached);
+  }
+
+  console.log('CACHE MISS!');
   const res = await client.query(queries.user, { id }).toPromise();
+  
+  redis.set(id, JSON.stringify(res.data.user));
   return res.data.user;
 }
 
