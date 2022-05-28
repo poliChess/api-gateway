@@ -1,10 +1,11 @@
 import jwt from '../jwt';
+import google from '../google';
 
 import { getMatches, getHistory, leaveQueue, enterQueue } from '../services/matchService';
 import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from '../services/userService';
 import { suggestMove, validateMove } from '../services/gameEngineService';
 
-import { authThen } from '../utils';
+import { authThen, statusBad } from '../utils';
 import { Root } from '../utils';
 
 const resolvers: Root = {
@@ -23,7 +24,15 @@ const resolvers: Root = {
   Mutation: {
     register: ({}, args) => addUser(args),
     login: async ({}, args) => {
-      const res = await authenticate(args);
+      let res: any;
+      if (args.idToken) {
+        const googleIdentity = google.verify(args.idToken);
+        console.log(googleIdentity);
+        return statusBad('not implemented');
+      } else {
+        res = await authenticate(args);
+      }
+
       if (!res.success) return res;
 
       res.token = jwt.create({ id: res.user.id });

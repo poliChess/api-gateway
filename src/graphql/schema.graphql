@@ -18,7 +18,7 @@ type Query {
 type Mutation {
   # user service
   register(mail: String!, username: String!, password: String!): StandardStatus!
-  login(username: String!, password: String!): LoginResponse!
+  login(username: String!, password: String!, idToken: String): LoginResponse!
   updateUser(mail: String, username: String, password: String): UpdateUserResponse!
   deleteUser: StandardStatus!
 
