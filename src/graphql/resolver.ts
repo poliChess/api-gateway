@@ -2,7 +2,7 @@ import jwt from '../jwt';
 import google from '../google';
 
 import { getMatches, getHistory, leaveQueue, enterQueue } from '../services/matchService';
-import { authenticate, getUser, findUser, addUser, updateUser, deleteUser } from '../services/userService';
+import { authenticate, getUser, findUser, addUser, updateUser, deleteUser, googleLogin } from '../services/userService';
 import { suggestMove, validateMove } from '../services/gameEngineService';
 
 import { authThen, statusBad } from '../utils';
@@ -26,9 +26,16 @@ const resolvers: Root = {
     login: async ({}, args) => {
       let res: any;
       if (args.idToken) {
-        const googleIdentity = google.verify(args.idToken);
-        console.log(googleIdentity);
-        return statusBad('not implemented');
+        const googleIdentity = await google.verify(args.idToken);
+        if (!googleIdentity) return statusBad('bad id token');
+
+        const payload = {
+          id: googleIdentity.sub,
+          mail: googleIdentity.email,
+          username: googleIdentity.name
+        };
+
+        res = await googleLogin(payload);
       } else {
         res = await authenticate(args);
       }

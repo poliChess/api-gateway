@@ -73,6 +73,21 @@ const mutations = {
         message
       }
     }`,
+  googleLogin: `mutation($id: ID!, $mail: String, $username: String){
+      getOrAddGoogleUser(id: $id, mail: $mail, username: $username) {
+        success
+        message
+        user {
+          id
+          mail
+          username
+          playedGames
+          wonGames
+          rating
+          lastLogin
+        }
+      }
+    }`,
 }
 
 async function getUser(id: string) {
@@ -125,6 +140,20 @@ async function authenticate(args: { username: string, password: string }) {
   return res.data.authenticate;
 }
 
+async function googleLogin(args: { id: string, mail?: string, username?: string }) {
+  const res = await client.mutation(mutations.googleLogin, args).toPromise();
+
+  if (res.data && res.data.getOrAddGoogleUser.success) {
+    const redis = await getClient();
+    const user = res.data.getOrAddGoogleUser.user;
+
+    redis.set(user.id, JSON.stringify(user));
+    redis.set(user.username, user.id);
+  }
+
+  return res.data.getOrAddGoogleUser;
+}
+
 async function updateUser(args: { id: string, mail: string, username: string, password: string }) {
   const res = await client.mutation(mutations.updateUser, args).toPromise();
 
@@ -149,4 +178,4 @@ async function deleteUser(id: string) {
   return res.data.deleteUser;
 }
 
-export { addUser, getUser, findUser, authenticate, updateUser, deleteUser }
+export { addUser, getUser, findUser, authenticate, updateUser, deleteUser, googleLogin }
