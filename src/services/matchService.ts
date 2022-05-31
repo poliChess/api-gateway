@@ -4,6 +4,7 @@ const serviceUrl = 'http://matchmaking-service:3000';
 
 async function getMatches(args?: { playerID: string }) {
   const res = await axios.get(`${serviceUrl}/match/current`, { data: args });
+  if (!res.data) return null;
   return res.data;
 }
 
