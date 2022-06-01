@@ -1,6 +1,6 @@
 import { OAuth2Client } from 'google-auth-library';
 
-const clientId = "332864392841-e914g390g6h9a1a3rt9m48ol63u0om0h.apps.googleusercontent.com";
+const clientId = "202173917816-q127ko40g6h9d2rvcsmjmdsj8kupmpro.apps.googleusercontent.com";
 const client = new OAuth2Client(clientId);
 
 async function verify(idToken: string) {
