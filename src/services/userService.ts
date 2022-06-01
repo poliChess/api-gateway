@@ -11,6 +11,7 @@ const queries = {
         id
         mail
         username
+        avatar
         playedGames
         wonGames
         rating
@@ -22,6 +23,7 @@ const queries = {
         id
         mail
         username
+        avatar
         playedGames
         wonGames
         rating
@@ -52,14 +54,15 @@ const mutations = {
         message
       } 
     }`,
-  updateUser: `mutation($id: ID!, $mail: String, $username: String, $password: String) {
-      updateUser(id: $id, mail: $mail, username: $username, password: $password) {
+  updateUser: `mutation($id: ID!, $mail: String, $username: String, $password: String, $avatar: String) {
+      updateUser(id: $id, mail: $mail, username: $username, password: $password, avatar: $avatar) {
         success
         message
         user {
           id
           mail
           username
+          avatar
           playedGames
           wonGames
           rating
