@@ -1,8 +1,8 @@
 import axios from 'axios';
 import discovery from '../grpc/discovery';
 
-let addr: string = '';
-const serviceUrl = async () => {
+let addr: string | null = null;
+const serviceAddr = async () => {
   while (!addr) {
     const res = await discovery.get('game-engine-service');
 
@@ -18,12 +18,12 @@ const serviceUrl = async () => {
 };
 
 async function suggestMove(fen: string) {
-  const res = await axios.post(`http://${await serviceUrl()}/engine/move/suggest`, { fen });
+  const res = await axios.post(`http://${await serviceAddr()}/engine/move/suggest`, { fen });
   return res.data;
 }
 
 async function validateMove(fen: string, move: string) {
-  const res = await axios.post(`http://${await serviceUrl()}/engine/move/validate`, { fen, move });
+  const res = await axios.post(`http://${await serviceAddr()}/engine/move/validate`, { fen, move });
   return res.data;
 }
 
