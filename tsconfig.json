@@ -5,10 +5,9 @@
 		"moduleResolution": "node",
 		"lib": [
 			"es2015",
-            "dom"
 		],
 
-        "esModuleInterop": true,
+		"esModuleInterop": true,
 
 		"rootDir": "src",
 		"outDir": "lib",
@@ -31,8 +30,9 @@
 		"declaration": true,
 
 		"pretty": true,
-        "skipLibCheck": true
+		"skipLibCheck": true
 	},
+
 	"include": [
 		"typings/**/*",
 		"src/**/*"

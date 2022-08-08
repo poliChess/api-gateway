@@ -1,13 +1,15 @@
 import 'isomorphic-unfetch';
 import { ApolloServer } from 'apollo-server';
 
+import discovery from './grpc/discovery';
+
 import typeDefs from './graphql/schema';
 import resolvers from './graphql/resolver';
 
 import jwt from './jwt';
 
 function main() {
-  const server = new ApolloServer({ 
+  const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req }) => {
@@ -19,6 +21,8 @@ function main() {
   server.listen(3000).then(() => {
     console.log("api gateway started");
   });
+
+  discovery.register('api-gateway', 'api-gateway:3000');
 }
 
 main()

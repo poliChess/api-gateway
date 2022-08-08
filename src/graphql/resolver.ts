@@ -49,7 +49,7 @@ const resolvers: Root = {
     updateUser: authThen(({}, args, context) => updateUser({ id: context.identity.id, ...args })),
     deleteUser: authThen(({}, {}, context) => deleteUser(context.identity.id)),
 
-    enterQueue: authThen(async ({}, args, context) => { 
+    enterQueue: authThen(async ({}, args, context) => {
       const user = await getUser(context.identity.id);
       return enterQueue({ playerID: user.id, playerRating: user.rating, computer: args.computer });
     }),
