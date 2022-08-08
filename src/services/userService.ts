@@ -6,7 +6,7 @@ import discovery from "../grpc/discovery";
 let client: any = null;
 const gqlClient = async () => {
   while (!client) {
-    const res = await discovery.get('matchmaking-service');
+    const res = await discovery.get('user-service');
 
     if (res.status.success) {
       client = createClient({ url: `http://${res.service.serviceAddr}/graphql` });
